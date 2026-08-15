@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK REACTOR - Auto React Generator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #1a1a1a;
+            border: 2px solid #00ff41;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .status-box {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00ff41;
+        }
+        .status-label {
+            color: #888;
+            font-size: 14px;
+        }
+        .status-value {
+            color: #00ff41;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #qrImage {
+            max-width: 200px;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            background: white;
+            padding: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00ff41;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            padding: 14px;
+            background: #00ff41;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-danger {
+            background: #ff0040;
+        }
+        .btn-danger:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 64, 0.5);
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+        .result-box.show {
+            display: block;
+        }
+        .log-item {
+            color: #00ff41;
+            font-size: 14px;
+            padding: 3px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #555;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #00ff41;
+            text-decoration: none;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ DARK REACTOR</h1>
+        <div class="subtitle">Auto React + Member Generator</div>
+
+        <div class="status-box">
+            <div class="status-label">STATUS BOT</div>
+            <div class="status-value" id="statusText">⏳ LOADING...</div>
+        </div>
+
+        <div class="qr-container" id="qrContainer" style="display:none;">
+            <img id="qrImage" src="" alt="QR Code">
+            <p style="color:#888; margin-top:10px;">📱 Scan QR dengan WhatsApp</p>
+        </div>
+
+        <div id="mainForm" style="display:none;">
+            <div class="form-group">
+                <label>🔑 CHANNEL ID</label>
+                <input type="text" id="channelId" placeholder="0029VbDRquT7T8bTQ5rSuo2C" value="0029VbDRquT7T8bTQ5rSuo2C">
+            </div>
+
+            <div class="form-group">
+                <label>📊 JUMLAH REACT</label>
+                <input type="number" id="jumlah" placeholder="100" value="100" min="1" max="9999">
+            </div>
+
+            <div class="btn-group">
+                <button onclick="runReact()">🔥 REACT</button>
+                <button onclick="runMember()" class="btn-danger">👥 MEMBER</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div id="resultLog"></div>
+        </div>
+
+        <div class="footer">
+            Created by <a href="#">DARK AI GEN 5</a> | Powered by Esa
+        </div>
+    </div>
+
+    <script>
+        let statusInterval;
+
+        // ===== CEK STATUS =====
+        async function checkStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                
+                document.getElementById('statusText').textContent = data.status;
+                
+                if (data.status === 'WAITING_SCAN' && data.qr) {
+                    document.getElementById('qrContainer').style.display = 'block';
+                    document.getElementById('qrImage').src = data.qr;
+                    document.getElementById('mainForm').style.display = 'none';
+                } else if (data.status === 'READY') {
+                    document.getElementById('qrContainer').style.display = 'none';
+                    document.getElementById('mainForm').style.display = 'block';
+                } else {
+                    document.getElementById('mainForm').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // ===== REACT GENERATOR =====
+        async function runReact() {
+            const channelId = document.getElementById('channelId').value.trim();
+            const jumlah = document.getElementById('jumlah').value;
+
+            if (!channelId || !jumlah) {
+                alert('Isi semua data bos!');
+                return;
+            }
+
+            const resultBox = document.getElementById('resultBox');
+            const resultLog = document.getElementById('resultLog');
+            resultBox.classList.add('show');
+            resultLog.innerHTML = '<div class="log-item">⏳ Proses react...</div>';
+
+            try {
+                const res = await fetch('/api/react', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ channelId, jumlah })
+                });
+
+                const data = await res.json();
+                
+                if (data.success) {
+                    resultLog.innerHTML = `<div class="log-item">✅ ${data.message}</div>`;
+                    data.results.forEach(item => {
+                        resultLog.innerHTML += `<div class="log-item">[${item.no}] ${item.emoji}</div>`;
+                    });
+                } else {
+                    resultLog.innerHTML = `<div class="log-item" style="color:#ff0040;">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                resultLog.innerHTML = `<div class="log-item" style="color:#ff0040;">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // ===== MEMBER GENERATOR =====
+        async function runMember() {
+            const channelId = document.getElementById('channelId').value.trim();
+            const jumlah = document.getElementById('jumlah').value;
+
+            if (!channelId || !jumlah) {
+                alert('Isi semua data bos!');
+                return;
+            }
+
+            const resultBox = document.getElementById('resultBox');
+            const resultLog = document.getElementById('resultLog');
+            resultBox.classList.add('show');
+            resultLog.innerHTML = '<div class="log-item">⏳ Generating invite link...</div>';
+
+            try {
+                const res = await fetch('/api/member', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ channelId, jumlah })
+                });
+
+                const data = await res.json();
+                
+                if (data.success) {
+                    resultLog.innerHTML = `
+                        <div class="log-item">✅ ${data.message}</div>
+                        <div class="log-item">🔗 Link: <a href="${data.inviteLink}" target="_blank">${data.inviteLink}</a></div>
+                        <div class="log-item">💡 ${data.tips}</div>
+                    `;
+                } else {
+                    resultLog.innerHTML = `<div class="log-item" style="color:#ff0040;">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                resultLog.innerHTML = `<div class="log-item" style="color:#ff0040;">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // ===== LOOP CEK STATUS =====
+        checkStatus();
+        statusInterval = setInterval(checkStatus, 3000);
+    </script>
+</body>
+</html>
